@@ -2,13 +2,18 @@
 var assert = require('assert');
 var htmlCommentRegex = require('./');
 
-var html = '<!DOCTYPE html><!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]--><!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]--><!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]--><!--[if gt IE 8]><!--><html lang="en"><head><meta charset="UTF-8"><title>Document</title></head><body></body></html>';
+var html = '<!DOCTYPE html><!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]--> <!-- normal comment 1 --><!--normal comment 2--> <html lang="en"><head><meta charset="UTF-8"><title>Document</title></head><body></body></html>';
 
 it('html should match the regex', function() {
-  assert.deepEqual(html.match(htmlCommentRegex), [
-    '<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->',
-    '<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->',
-    '<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->',
-    '<!--[if gt IE 8]><!-->'
-  ]);
+  var result = htmlCommentRegex.exec(html);
+  assert.deepEqual(result[0], '<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->');
+  assert.deepEqual(result[1], '[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]');
+
+  result = htmlCommentRegex.exec(html);
+  assert.deepEqual(result[0], '<!-- normal comment 1 -->');
+  assert.deepEqual(result[1], ' normal comment 1 ');
+
+  result = htmlCommentRegex.exec(html);
+  assert.deepEqual(result[0], '<!--normal comment 2-->');
+  assert.deepEqual(result[1], 'normal comment 2');
 });
