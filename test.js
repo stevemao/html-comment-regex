@@ -6,10 +6,6 @@ var html = '<!DOCTYPE html><!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-i
 
 it('html should match the regex', function() {
   var result = htmlCommentRegex.exec(html);
-  assert.deepEqual(result[0], '<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->');
-  assert.deepEqual(result[1], '[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]');
-
-  result = htmlCommentRegex.exec(html);
   assert.deepEqual(result[0], '<!-- normal comment 1 -->');
   assert.deepEqual(result[1], ' normal comment 1 ');
 
